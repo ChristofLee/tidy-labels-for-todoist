@@ -1,0 +1,20 @@
+{
+  "name": "Tidy Labels for Todoist",
+  "version": "1.0.0",
+  "description": "Alphabetise labels and assign colors.",
+  "main": "bin/index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ChristofLee",
+  "license": "MIT",
+  "bin": {
+    "clean": "./bin/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "todoist": "^0.4.0",
+    "yargs": "^16.2.0"
+  }
+}
