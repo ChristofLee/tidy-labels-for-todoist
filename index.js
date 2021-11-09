@@ -17,7 +17,6 @@ const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 const todoistAPITimeLimit = 1000 * 60;
 const timerDelay = todoistAPITimeLimit / maxRetries + 1000;
 
-let labelsUpdated = 0;
 let i = color.first + 1;
 
 (async () => {
@@ -25,52 +24,9 @@ let i = color.first + 1;
 		// Get labels.
 		await todoist.sync(["labels"]);
 		const labels = await todoist.labels.get();
-
-		for (let j = 0; j < labels.length; j++) {
-			// Format name of the label.
-			let name = labels[j].name;
-			name = titleCase(name); // Make the name of the label Titlecase
-			name = name.replace(" ", "_"); // Replace spaces with underscores.
-
-			let order = j; // Alphabetise the labels.
-
-			// Only update if values are different.
-			if (
-				labels[j].color != i || // Has the colour changed?
-				labels[j].name != name || // Has the name changed?
-				labels[j].order != order // Has the order changed?
-			) {
-				await todoistConnect(async () => {
-					let label = todoist.labels.update({
-						id: labels[j].id,
-						color: i,
-						name: name,
-						item_order: order,
-					});
-
-					await label;
-				});
-
-				labelsUpdated++;
-			}
-
-			i++;
-
-			// Reset color loop.
-			if (i > color.last) {
-				i = color.first;
-			}
-		}
+		await updateChangedLabels(labels);
 	});
 })();
-
-function titleCase(str) {
-	str = str.toLowerCase().split(" ");
-	for (var i = 0; i < str.length; i++) {
-		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-	}
-	return str.join(" ");
-}
 
 async function todoistConnect(connect) {
 	for (let tries = 0; tries < maxRetries; tries++) {
@@ -91,4 +47,45 @@ async function todoistConnect(connect) {
 			}
 		}
 	}
+}
+
+async function updateChangedLabels(labels) {
+	if (labels.length > 0) {
+		for (let j = 0; j < labels.length; j++) {
+			// Format name of the label.
+			let name = labels[j].name;
+			name = name.toLowerCase(); // Make the name of the label lowercase
+			name = name.replace(" ", "_"); // Replace spaces with underscores.
+
+			let order = j; // Alphabetise the labels.
+
+			// Only update if values are different.
+			if (
+				labels[j].color != i || // Has the colour changed?
+				labels[j].name != name || // Has the name changed?
+				labels[j].order != order // Has the order changed?
+			) {
+				await updateLabel({
+					id: labels[j].id,
+					color: i,
+					name: name,
+					item_order: order,
+				});
+			}
+
+			i++;
+
+			// Reset color loop.
+			if (i > color.last) {
+				i = color.first;
+			}
+		}
+	}
+}
+
+async function updateLabel(newLabel) {
+	await todoistConnect(async () => {
+		let label = todoist.labels.update(newLabel);
+		await label;
+	});
 }
