@@ -8,13 +8,16 @@ const Todoist = require("todoist").v8;
 const todoist = Todoist(process.env.TODOIST_API_KEY);
 
 const formatLabels = require("./lib/format-labels");
+const joinItemsToLabels = require("./lib/join-items-to-labels");
 
 (async () => {
 	await todoistConnect(async () => {
 		// Get labels.
-		await todoist.sync(["labels"]);
+		await todoist.sync(["items", "labels"]);
+		const items = await todoist.items.get();
 		const labels = await todoist.labels.get();
-		const formattedLabels = await formatLabels(labels);
+		const labelsAndTasks = await joinItemsToLabels(items, labels);
+		const formattedLabels = await formatLabels(labelsAndTasks);
 		await updateChangedLabels(labels, formattedLabels);
 	});
 })();
@@ -51,7 +54,8 @@ async function updateChangedLabels(labels, formattedLabels) {
 			// Only update if values are different.
 			if (
 				labels[i].color != formattedLabels[i].color || // Has the colour changed?
-				labels[i].name != formattedLabels[i].name
+				labels[i].name != formattedLabels[i].name ||
+				labels[i].item_order != formattedLabels[i].item_order
 			) {
 				await updateLabel(formattedLabels[i]);
 			}

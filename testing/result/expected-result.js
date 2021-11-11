@@ -14,8 +14,8 @@ module.exports = [
 	{
 		color: 32,
 		id: 5534893447,
-		item_order: 2,
-		name: "example_of_unchanged",
+		item_order: 6,
+		name: "example_task",
 	},
 	{
 		color: 33,

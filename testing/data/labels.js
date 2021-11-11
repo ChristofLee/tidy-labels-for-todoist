@@ -1,0 +1,51 @@
+module.exports = [
+	{
+		color: 32,
+		id: 2156022644,
+		is_deleted: 0,
+		is_favorite: 0,
+		item_order: 2,
+		name: "bins",
+	},
+	{
+		color: 47,
+		id: 2154023682,
+		is_deleted: 0,
+		is_favorite: 0,
+		item_order: 37,
+		name: "home",
+	},
+	{
+		color: 39,
+		id: 2155599841,
+		is_deleted: 0,
+		is_favorite: 0,
+		item_order: 49,
+		name: "mac",
+	},
+
+	{
+		color: 33,
+		id: 2158800551,
+		is_deleted: 0,
+		is_favorite: 0,
+		item_order: 63,
+		name: "pc",
+	},
+	{
+		color: 34,
+		id: 2156272670,
+		is_deleted: 0,
+		is_favorite: 0,
+		item_order: 64,
+		name: "phone",
+	},
+	{
+		color: 46,
+		id: 2155034883,
+		is_deleted: 0,
+		is_favorite: 1,
+		item_order: 96,
+		name: "waiting_to_start",
+	},
+];
