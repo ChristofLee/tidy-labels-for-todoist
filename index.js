@@ -3,13 +3,9 @@ require("dotenv").config();
 
 // Define the Todoist API.
 const Todoist = require("todoist").v8;
+
 // Connect to the API.
 const todoist = Todoist(process.env.TODOIST_API_KEY);
-
-// Allow the passing of vars through CLI.
-const yargs = require("yargs/yargs");
-const { hideBin } = require("yargs/helpers");
-const argv = yargs(hideBin(process.argv)).argv;
 
 // A value between 30 and 49, as outlined in the Todoist API documentation.
 const color = {
