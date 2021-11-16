@@ -13,7 +13,7 @@ module.exports = [
 	},
 	{
 		color: 32,
-		id: 5534893445,
+		id: 5534893447,
 		item_order: 2,
 		name: "example_of_unchanged",
 	},

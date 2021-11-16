@@ -11,10 +11,11 @@ _This script is not created by, affiliated with, or supported by Doist._
 - `$ npm run start` in the root of the project.
 
 ## Features
+- [x] Colourise labels (so they aren't all grey!).
+- [x] Make label names all lowercase.
 - [x] Order labels alphabetically.
-- [x] Colorise labels (so they aren't all grey!).
 - [x] Replace spaces in label names with underscores.
-- [x] Unit tested releases.
+- [x] Unit testing.
 
 ## Where did this come from?
 
