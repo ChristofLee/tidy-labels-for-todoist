@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // Get the environment variables.
 require("dotenv").config();
 
