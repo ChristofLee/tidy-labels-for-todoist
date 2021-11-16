@@ -10,6 +10,12 @@ _This script is not created by, affiliated with, or supported by Doist._
 - `$ npm i` to install the dependencies.
 - `$ npm run start` in the root of the project.
 
+## Features
+- [x] Order labels alphabetically.
+- [x] Colorise labels (so they aren't all grey!).
+- [x] Replace spaces in label names with underscores.
+- [x] Unit tested releases.
+
 ## Where did this come from?
 
 I like the labelling system in Todoist but I couldn't find a way to make the feature work for me. After adding lots of labels it became cumbersome, so I wanted a clean way to tidy them up and so, this tool was born.

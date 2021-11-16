@@ -7,28 +7,24 @@ const Todoist = require("todoist").v8;
 // Connect to the API.
 const todoist = Todoist(process.env.TODOIST_API_KEY);
 
-// A value between 30 and 49, as outlined in the Todoist API documentation.
-const color = {
-	first: 30,
-	last: 49,
-};
-const maxRetries = 3;
-const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-const todoistAPITimeLimit = 1000 * 60;
-const timerDelay = todoistAPITimeLimit / maxRetries + 1000;
-
-let i = color.first + 1;
+const formatLabels = require("./lib/format-labels");
 
 (async () => {
 	await todoistConnect(async () => {
 		// Get labels.
 		await todoist.sync(["labels"]);
 		const labels = await todoist.labels.get();
-		await updateChangedLabels(labels);
+		const formattedLabels = await formatLabels(labels);
+		await updateChangedLabels(labels, formattedLabels);
 	});
 })();
 
 async function todoistConnect(connect) {
+	const maxRetries = 3;
+	const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+	const todoistAPITimeLimit = 1000 * 60;
+	const timerDelay = todoistAPITimeLimit / maxRetries + 1000;
+
 	for (let tries = 0; tries < maxRetries; tries++) {
 		try {
 			await connect();
@@ -49,35 +45,15 @@ async function todoistConnect(connect) {
 	}
 }
 
-async function updateChangedLabels(labels) {
+async function updateChangedLabels(labels, formattedLabels) {
 	if (labels.length > 0) {
-		for (let j = 0; j < labels.length; j++) {
-			// Format name of the label.
-			let name = labels[j].name;
-			name = name.toLowerCase(); // Make the name of the label lowercase
-			name = name.replace(" ", "_"); // Replace spaces with underscores.
-
-			let order = j; // Alphabetise the labels.
-
+		for (let i = 0; i < labels.length; i++) {
 			// Only update if values are different.
 			if (
-				labels[j].color != i || // Has the colour changed?
-				labels[j].name != name || // Has the name changed?
-				labels[j].order != order // Has the order changed?
+				labels[i].color != formattedLabels[i].color || // Has the colour changed?
+				labels[i].name != formattedLabels[i].name
 			) {
-				await updateLabel({
-					id: labels[j].id,
-					color: i,
-					name: name,
-					item_order: order,
-				});
-			}
-
-			i++;
-
-			// Reset color loop.
-			if (i > color.last) {
-				i = color.first;
+				await updateLabel(formattedLabels[i]);
 			}
 		}
 	}
@@ -85,7 +61,6 @@ async function updateChangedLabels(labels) {
 
 async function updateLabel(newLabel) {
 	await todoistConnect(async () => {
-		let label = todoist.labels.update(newLabel);
-		await label;
+		await todoist.labels.update(newLabel);
 	});
 }
