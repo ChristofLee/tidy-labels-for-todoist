@@ -33,16 +33,10 @@ async function todoistConnect(connect) {
 			await connect();
 			return;
 		} catch (error) {
-			switch (error.response.body.http_code) {
-				case 429:
-					// Retry.
-					await timer(timerDelay);
-
-				default:
-					console.warn(
-						error.response.body.http_code + ": " + error.response.body.error
-					);
-					break;
+			if ("response" in error && 429 == error.response.body.http_code) {
+				await timer(timerDelay); // Retry.
+			} else {
+				console.log(error);
 			}
 		}
 	}
