@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // Define the Todoist API.
-const Todoist = require("todoist").v8;
+const Todoist = require("todoist").v9;
 
 // Connect to the API.
 const todoist = Todoist(process.env.TODOIST_API_KEY);

@@ -15,7 +15,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "jest": "^27.3.1",
-    "todoist": "^0.4.0"
+    "todoist": "^1.1.0"
   },
   "engines": {
     "node": "14.x"
